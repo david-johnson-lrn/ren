@@ -20,11 +20,9 @@ $request = [
     'activity_id'          => 'item_activity_demo',
     'activity_template_id' => 'demo-activity-1',
     "config" => [
-        "title" => "This is my Learnosity Assessment Player",
-        "subtitle" => "It uses an Activity created with Author API and displays it in Assess mode",
-        "labelBundle" => [ // full list of available label bundle config choices here: https://reference.learnosity.com/assess-api/assess-api-i18n#labelBundle
-            'itemCountOf' => '/' //changing the item count from default 'of' to '/'
-        ]
+        "title" => "Timed Player",
+        "subtitle" => "Default set for 5 seconds to finish all items in activity",
+        'regions' => "main"
     ]
 ];
 
@@ -39,10 +37,26 @@ $signedRequest = $Init->generate();
 <script src="//items.learnosity.com?v2021.2.LTS"></script>
 
 <script>
+    let time = 0 //Created a time holder to update on 'time:changed'
     var itemsApp = LearnosityItems.init(<?php echo $signedRequest; ?>, {
         readyListener: function() {
             console.log('ReadyListener fired');
-            console.log(window.LearnosityAssess.init())
+
+            var submitSettings = {
+                show_submit_ui: true,
+                show_submit_confirmation: false //settings to prevent user from choosing to submit
+            }
+
+
+            itemsApp.on('time:change', function() {
+                time = itemsApp.getTime();
+                if (time === 5) { //at 5 seconds automatically submit activity
+                    alert("times Up!")
+                    itemsApp.submit(submitSettings);
+                    console.log("Test Submitted")
+                }
+            });
+
 
         }
     });

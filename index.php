@@ -8,5 +8,6 @@
 </head>
 <body>
     <a href="./startScreen.php">Start Screen</a>
+    <a href="./labelBundle.php">Label Bundle</a>
 </body>
 </html>
